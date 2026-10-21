@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const connectDB = async () => {  
-    const uri = "mongodb+srv://mayurkasherwalmk_db_user:Mayur1996@devtinder.gyubyaw.mongodb.net/?appName=DevTinder";
+const connectDB = async () => {      
+    const uri = process.env.DB_CONNECTION_STRING
     await mongoose.connect(uri);
     console.log("MongoDB connected successfully");
 };

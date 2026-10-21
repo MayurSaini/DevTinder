@@ -3,8 +3,9 @@ const { userAuth } = require('../middleware/auth');
 const ConnectionRequest = require('../models/connectionRequest');
 const User = require('../models/user');
 const requestRouter = express.Router();
-
-requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
+const sendEmail = require("../utils/sendEmail")
+requestRouter.post("/request/send/:status/:toUserId", 
+	userAuth, async (req, res) => {
 	try {
 		const fromUserId = req.user._id;
 		const toUserId = req.params.toUserId;
@@ -16,13 +17,13 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res)
 			})
 		}
 
-		const toUser = await User.findById(toUserId);
+		const toUser = await User.findById(toUserId);		
 		if (!toUser) {
 			return res.status(404).send({
 				message: "User not found"
 			})
 		}
-		// Already any connection request pending 
+		// Already any connection request pending 		
 		const existingConnectionRequest = await ConnectionRequest.findOne({
 			$or: [
 				{
@@ -34,18 +35,19 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res)
 					fromUserId: toUserId
 				}
 			]
-		})
+		})		
 		if (existingConnectionRequest) {
 			return res.status(400).send({
 				message: "Connection Request already exists!"
 			})
-		}
+		}		
 		const connectionRequest = new ConnectionRequest({
 			fromUserId,
 			toUserId,
 			status
-		})
-		const data = await connectionRequest.save();
+		})		
+		const data = await connectionRequest.save();		
+		const emailRes = await sendEmail.run("A new frined request from ", req.user.firstName + " is " + status + " in "  + toUser.firstName);		
 		res.json({
 			message: "Connection Request sent successfully",
 			data

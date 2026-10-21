@@ -1,17 +1,20 @@
 const express = require('express');
+require("dotenv").config();
 const connectDB = require("./config/database");
 // const User = require("./models/user")
 const app = express();
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-// app.use(cors({
-//   origin: "", // add frontend url
-//   credentials: true
-// }))
-app.use(cors({
-    origin: "http://www.twingle.live",
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://www.twingle.live",
+      "https://www.twingle.live",
+    ],
     credentials: true,
-  }))
+  })
+);
 app.use(express.json());
 app.use(cookieParser())
 
