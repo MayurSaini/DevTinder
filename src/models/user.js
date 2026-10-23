@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require("validator");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
 	firstName: {
 		type: String,
 		length: 100,
@@ -47,6 +47,13 @@ const userSchema = mongoose.Schema({
 				throw new Error("Gender data not valid")
 			}
 		}
+	},
+	isPremium: {
+		type: Boolean,
+		default: false
+	},
+	membershipType: {
+		type: String,
 	},
 	photoUrl: {
 		type: String,

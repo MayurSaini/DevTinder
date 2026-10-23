@@ -1,5 +1,6 @@
 const express = require('express');
 require("dotenv").config();
+require("./utils/cronJob")
 const connectDB = require("./config/database");
 // const User = require("./models/user")
 const app = express();
@@ -22,11 +23,13 @@ const authRouter= require('./routes/authRoute');
 const profileRouter = require('./routes/profileRoute');
 const requestRouter = require('./routes/requestRoute');
 const userRouter = require('./routes/userRoute');
+const paymentRouter = require('./routes/paymentRoute')
 
-app.use('/', authRouter)
+app.use('/', authRouter);
 app.use('/', profileRouter);
 app.use('/', requestRouter);
-app.use('/', userRouter)
+app.use('/', userRouter);
+app.use('/', paymentRouter);
 
 connectDB().then(() => {
   console.log("Database connect established...");
