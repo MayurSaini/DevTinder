@@ -75,7 +75,7 @@ requestRouter.post("/request/review/:status/:requestId", userAuth, async(req, re
 			toUserId: loggedInUser._id,
 			status: "interested"
 		})
-
+		
 		if(!connectionRequest) {
 			return res.status(404).json({
 				message: "connection not found"
@@ -83,6 +83,8 @@ requestRouter.post("/request/review/:status/:requestId", userAuth, async(req, re
 		}
 
 		connectionRequest.status = status
+				console.log("connectionRequest-==-=--=-=-=>", connectionRequest);
+
 		const data = await connectionRequest.save();
 
 		return res.json({message: "Connection Request" + status , data})

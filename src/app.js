@@ -24,16 +24,23 @@ const profileRouter = require('./routes/profileRoute');
 const requestRouter = require('./routes/requestRoute');
 const userRouter = require('./routes/userRoute');
 const paymentRouter = require('./routes/paymentRoute')
+const chatRouter = require('./routes/chatRouter');
+const http = require('http');
+const initializeSocket = require('./utils/socket');
 
 app.use('/', authRouter);
 app.use('/', profileRouter);
 app.use('/', requestRouter);
 app.use('/', userRouter);
 app.use('/', paymentRouter);
+app.use('/', chatRouter);
 
+const server = http.createServer(app);
+initializeSocket(server);
 connectDB().then(() => {
   console.log("Database connect established...");
-  app.listen(4321, () => {
+  // instead app.listen we made it server.listen this is for socket
+  server.listen(4321, () => {
     console.log('Server is running on port 4321');
   });
 })
